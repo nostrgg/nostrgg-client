@@ -1,8 +1,8 @@
-import { dateToUnix } from "./utils"
 import { utils, schnorr, getPublicKey } from "@noble/secp256k1"
-const { sha256 } = utils
-
+import { dateToUnix } from "./utils"
 import { NostrEvent } from "./types"
+
+const { sha256 } = utils
 
 function hexChar(val: number) {
   if (val < 10) return String.fromCharCode(48 + val)
