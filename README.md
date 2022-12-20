@@ -36,6 +36,7 @@ initNostr({
   onEvent: (relayUrl, event) => {
     console.log("Nostr received event:", event)
   },
+  debug: true, // Enable logs
 });
 ```
 
