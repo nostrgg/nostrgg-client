@@ -27,9 +27,6 @@
       "pre-commit": "dts lint"
     }
   },
-  "jest": {
-    "testEnvironment": "node"
-  },
   "peerDependencies": {},
   "engines": {
     "node": ">=12"
