@@ -2,6 +2,7 @@ import { NostrEvent, ReceiveEvent, ReceiveMsgType, SendEvent } from './types';
 
 export * from './types';
 export * from './crypto';
+export * from './utils';
 
 export type SendEventFunc = (event: SendEvent, url?: string) => void;
 
