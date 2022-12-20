@@ -1,6 +1,9 @@
-# @nostrgg/client
-
+<p align="center">
+<img width="623" alt="nostrgg-client" src="https://user-images.githubusercontent.com/2598660/208626983-e404bead-f53e-45e0-bbdf-5ee46d8368c9.png">
+</p>
+<p align="center">
 Nostr client written in TypeScript ✨
+</p>
 
 ## Installation
 
