@@ -18,6 +18,10 @@
     "size": "size-limit",
     "start": "dts watch"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nostrgg/nostrgg-client"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "dts lint"
