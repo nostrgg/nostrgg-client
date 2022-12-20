@@ -1,36 +1,33 @@
-import { NostrEvent, ReceiveEvent, ReceiveMsgType, SendEvent } from './types';
+import { NostrEvent, ReceiveEvent, ReceiveMsgType, SendEvent } from "./types"
 
-export * from './types';
-export * from './crypto';
-export * from './utils';
+export * from "./types"
+export * from "./crypto"
+export * from "./utils"
 
-export type SendEventFunc = (event: SendEvent, url?: string) => void;
+export type SendEventFunc = (event: SendEvent, url?: string) => void
 
-export type OnConnectFunc = (
-  relayUrl: string,
-  sendEvent: SendEventFunc
-) => void;
+export type OnConnectFunc = (relayUrl: string, sendEvent: SendEventFunc) => void
 
-export type OnEventFunc = (relayUrl: string, event: NostrEvent) => void;
+export type OnEventFunc = (relayUrl: string, event: NostrEvent) => void
 
 interface RelayOptions {
-  relayUrls: string[];
-  onConnect?: OnConnectFunc;
-  onError?: (relayUrl: string, err: Event) => void;
-  onClose?: (relayUrl: string) => void;
-  onEvent?: OnEventFunc;
-  debug?: boolean;
+  relayUrls: string[]
+  onConnect?: OnConnectFunc
+  onError?: (relayUrl: string, err: Event) => void
+  onClose?: (relayUrl: string) => void
+  onEvent?: OnEventFunc
+  debug?: boolean
 }
 
-const connections: Record<string, WebSocket> = {};
+const connections: Record<string, WebSocket> = {}
 
 export type NostrClient = {
-  sendEvent: SendEventFunc;
-};
+  sendEvent: SendEventFunc
+}
 
 const subId = Math.random()
   .toString()
-  .slice(2);
+  .slice(2)
 
 export const initNostr = ({
   relayUrls,
@@ -40,76 +37,76 @@ export const initNostr = ({
   onClose,
   debug,
 }: RelayOptions): NostrClient => {
-  const log = (type: 'info' | 'error' | 'warn', ...args: unknown[]) => {
-    if (!debug) return;
-    console[type](...args);
-  };
+  const log = (type: "info" | "error" | "warn", ...args: unknown[]) => {
+    if (!debug) return
+    console[type](...args)
+  }
 
   const sendEvent = (event: SendEvent, relayUrl?: string) => {
-    const urls = relayUrl ? [relayUrl] : Object.keys(connections);
+    const urls = relayUrl ? [relayUrl] : Object.keys(connections)
 
-    urls.forEach(relayUrl => {
-      const ws = connections[relayUrl];
+    urls.forEach((relayUrl) => {
+      const ws = connections[relayUrl]
 
       if (!ws || ws.readyState !== 1) {
         log(
-          'error',
-          `❌ nostrgg: Couldn't send event! Websocket connection to ${relayUrl} is not open.`
-        );
-        return;
+          "error",
+          `❌ nostrgg: Couldn't send event! Websocket connection to ${relayUrl} is not open.`,
+        )
+        return
       }
 
-      const [eventType, args] = event;
+      const [eventType, args] = event
 
-      const eventWithSubId = [eventType, subId, args];
-      const eventToSend = eventType === 'EVENT' ? event : eventWithSubId;
+      const eventWithSubId = [eventType, subId, args]
+      const eventToSend = eventType === "EVENT" ? event : eventWithSubId
 
-      log('info', '⬆️ nostrgg: Sending event:', eventToSend);
+      log("info", "⬆️ nostrgg: Sending event:", eventToSend)
 
-      const msg = JSON.stringify(eventToSend);
+      const msg = JSON.stringify(eventToSend)
 
-      ws.send(msg);
-    });
-  };
+      ws.send(msg)
+    })
+  }
 
-  relayUrls.forEach(relayUrl => {
-    const connection = connections[relayUrl];
+  relayUrls.forEach((relayUrl) => {
+    const connection = connections[relayUrl]
 
     if (!connection) {
-      connections[relayUrl] = new WebSocket(relayUrl);
-      const ws = connections[relayUrl];
+      connections[relayUrl] = new WebSocket(relayUrl)
+      const ws = connections[relayUrl]
 
-      if (!ws) return;
+      if (!ws) return
 
       ws.onopen = () => {
-        log('info', `✅ nostrgg: Connected to ${relayUrl}`);
-        onConnect?.(relayUrl, sendEvent);
-      };
+        log("info", `✅ nostrgg: Connected to ${relayUrl}`)
+        onConnect?.(relayUrl, sendEvent)
+      }
 
-      ws.onerror = ev => {
-        log('error', `❌ nostrgg: Error connecting to ${relayUrl}!`);
-        onError?.(relayUrl, ev);
-      };
+      ws.onerror = (ev) => {
+        log("error", `❌ nostrgg: Error connecting to ${relayUrl}!`)
+        onError?.(relayUrl, ev)
+      }
 
       ws.onclose = () => {
-        log('warn', `👋 nostrgg: Connection closed for ${relayUrl}`);
-        onClose?.(relayUrl);
-      };
+        log("warn", `👋 nostrgg: Connection closed for ${relayUrl}`)
+        onClose?.(relayUrl)
+      }
 
       ws.onmessage = (msg: MessageEvent) => {
-        const data = JSON.parse(msg.data) as ReceiveEvent;
+        const data = JSON.parse(msg.data) as ReceiveEvent
 
-        log('info', '⬇️ nostrgg: Received event:', data);
+        log("info", "⬇️ nostrgg: Received event:", data)
 
         if (data[0] === ReceiveMsgType.EVENT) {
-          const event = data[2];
-          onEvent?.(relayUrl, event);
+          const event = data[2]
+          onEvent?.(relayUrl, event)
         }
-      };
+      }
     }
-  });
+  })
 
   return {
     sendEvent,
-  };
-};
+  }
+}

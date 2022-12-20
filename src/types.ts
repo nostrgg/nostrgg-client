@@ -8,40 +8,40 @@ export enum Kind {
 }
 
 export type Filter = {
-  ids?: string[];
-  kinds?: Kind[];
-  authors?: string[];
-  since?: number;
-  until?: number;
-};
+  ids?: string[]
+  kinds?: Kind[]
+  authors?: string[]
+  since?: number
+  until?: number
+}
 
 export type NostrEvent = {
-  id?: string;
-  sig?: string;
-  kind: number;
-  tags: string[][];
-  pubkey: string;
-  content: string;
-  created_at: number;
-};
+  id?: string
+  sig?: string
+  kind: number
+  tags: string[][]
+  pubkey: string
+  content: string
+  created_at: number
+}
 
 export enum SendMsgType {
-  EVENT = 'EVENT',
-  REQ = 'REQ',
-  CLOSE = 'CLOSE',
+  EVENT = "EVENT",
+  REQ = "REQ",
+  CLOSE = "CLOSE",
 }
 
 export enum ReceiveMsgType {
-  EVENT = 'EVENT',
-  NOTICE = 'NOTICE',
-  EOSE = 'EOSE',
-  CLOSE = 'CLOSE',
+  EVENT = "EVENT",
+  NOTICE = "NOTICE",
+  EOSE = "EOSE",
+  CLOSE = "CLOSE",
 }
 
 export type SendEvent =
   | [SendMsgType.REQ, Filter]
-  | [SendMsgType.EVENT, NostrEvent];
+  | [SendMsgType.EVENT, NostrEvent]
 
 export type ReceiveEvent =
   | [ReceiveMsgType.EOSE, string]
-  | [ReceiveMsgType.EVENT, string, NostrEvent];
+  | [ReceiveMsgType.EVENT, string, NostrEvent]

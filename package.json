@@ -23,12 +23,6 @@
       "pre-commit": "dts lint"
     }
   },
-  "prettier": {
-    "printWidth": 80,
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "es5"
-  },
   "jest": {
     "testEnvironment": "node"
   },
@@ -53,7 +47,10 @@
     "@typescript-eslint/parser": "^5.47.0",
     "dts-cli": "^1.6.0",
     "eslint": "^8.30.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.2",
+    "prettier": "^2.8.1",
     "size-limit": "^8.1.0",
     "tslib": "^2.4.1",
     "typescript": "^4.9.4"
